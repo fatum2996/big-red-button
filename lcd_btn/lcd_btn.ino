@@ -111,12 +111,11 @@ void loop() {
       lcd.print("    \xA5\xA4MEPEH\xA5\xB1"); //ИЗМЕРЕНИЯ0);  
       mode = 0;
     }
-    if(incomingByte == measureState) {    //возврат в исходное состояние
+    if(incomingByte == measureState) {    //переход в состояние идет измерение
       lcd.setCursor(0, 0);
       lcd.print("      \xA5\xE0\xA2T      "); //ИДЁТ 
       lcd.setCursor(0, 1);
       lcd.print("    \xA5\xA4MEPEH\xA5\x45   ");//ИЗМЕРЕНИЕ
-      Serial.write(startMeasure); //начало измерения
       TIMSK1 = (1<<OCIE1A); // Interrupt enable
       digitalWrite(redPin, LOW);
       digitalWrite(greenPin, LOW);

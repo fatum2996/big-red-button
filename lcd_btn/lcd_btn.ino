@@ -18,6 +18,7 @@ byte incomingByte = 0;
 byte buttonState = 0;
 byte oneCounter = 0;
 byte zeroCounter = 0;
+byte released = 1;
 
 ISR( TIMER1_COMPA_vect ) {
   digitalWrite(yellowPin, state);
@@ -61,7 +62,8 @@ void loop() {
     buttonState = 1;
     zeroCounter = 0;
   }  
-  if(buttonState && (!mode)) { //если была нажата кнопка и еще не выведена надпись идет измерение
+  if(buttonState && (!mode) && released) { //если была нажата кнопка и еще не выведена надпись идет измерение
+    released = 0;
     lcd.setCursor(0, 0);
     lcd.print("      \xA5\xE0\xA2T      "); //ИДЁТ 
     lcd.setCursor(0, 1);
@@ -74,6 +76,8 @@ void loop() {
   }
   if(buttonState == 0 && mode == 1) //выведена надпись, кнопка отпущена
     mode = 2;
+  if(buttonState == 0) 
+    released = 1;
   if(Serial.available() > 0) {
     incomingByte = Serial.read();  
     if(incomingByte == goodState) {  //годен
